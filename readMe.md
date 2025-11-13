@@ -33,19 +33,6 @@ Ideal para quem passa longos períodos em frente ao computador e quer cuidar da 
 
 ---
 
-## 📂 Estrutura do projeto
-📁 estica-ai/
-│
-├── 📁 js
-│   └── 📄 index.js
-├── 📁 styles
-│   └── 🎨 style.css
-├── 🌐 index.html
-└── 📝 readMe.md
-
-
----
-
 ## ⚙️ Tecnologias utilizadas  
 
 - **HTML5** – Estrutura da página  
