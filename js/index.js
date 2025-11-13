@@ -1,53 +1,52 @@
-const button = document.getElementById('startBtn');
-const timerDisplay = document.getElementById('timer');
-let interval, countdown = 3600;
+    const timerDisplay = document.getElementById('timer');
+    const startButton = document.getElementById('startButton');
+    const intervalSelect = document.getElementById('intervalSelect');
 
-function updateTimerDisplay() {
-    const totalSeconds = countdown;
+    let timerInterval;
+    let endTime = null;
 
-    const remainingHours = String(Math.floor(totalSeconds/3600)).padStart(2, '0');
-    const remainingMinutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-    const remainingSeconds = String(totalSeconds % 60).padStart(2, '0');
+    function startTimer() {
+      const selectedSeconds = parseInt(intervalSelect.value, 10);
+      endTime = Date.now() + selectedSeconds * 1000;
 
-    timerDisplay.textContent = `${remainingHours}:${remainingMinutes}:${remainingSeconds}`;
-}
+      clearInterval(timerInterval);
+      updateTimerDisplay();
 
-async function pedirPermissaoNotificacao() {
-    if (Notification.permission !== 'granted') {
-        await Notification.requestPermission();
-    }
-}
-
-function enviarNotificacao() {
-    if (Notification.permission === 'granted') {
-        new Notification('Hora de se alongar! 🧘‍♂️', {
-            body: 'Levante-se, alongue o pescoço, os ombros e respire fundo!',
-            icon: 'https://cdn-icons-png.flaticon.com/512/3771/3771518.png'
-        });
-    } else {
-        alert('Hora de se alongar! 🧘‍♂️');
-    }
-}
-
-function iniciarContador() {
-    clearInterval(interval);
-    countdown = 3600;
-    updateTimerDisplay();
-
-    interval = setInterval(() => {
-        countdown--;
+      timerInterval = setInterval(() => {
         updateTimerDisplay();
+      }, 1000);
+    }
 
-        if (countdown <= 0) {
-            enviarNotificacao();
-            countdown = 3600;
-        }
-    }, 1000);
-}
+    function updateTimerDisplay() {
+      const now = Date.now();
+      const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
 
-button.addEventListener('click', async () => {
-    await pedirPermissaoNotificacao();
-    iniciarContador();
-    button.textContent = 'Lembrete em andamento...'
-    button.disabled = true;
-});
+      const hours = String(Math.floor(remaining / 3600)).padStart(2, '0');
+      const minutes = String(Math.floor((remaining % 3600) / 60)).padStart(2, '0');
+      const seconds = String(remaining % 60).padStart(2, '0');
+
+      timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        notifyUser();
+      }
+    }
+
+    function notifyUser() {
+      if (Notification.permission === "granted") {
+        new Notification("⏸️ Pausa para alongar!", {
+          body: "Hora de se levantar, esticar e relaxar os ombros!",
+        });
+      } else {
+        alert("Hora de se levantar, esticar e relaxar os ombros!");
+      }
+
+      startTimer();
+    }
+
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    startButton.addEventListener('click', startTimer);

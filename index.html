@@ -8,11 +8,19 @@
     </head>
     <body>
         <h1>Estica Aí</h1>
-        <h3>Lembrete de Pausa</h3>
-        <p>Este site vai te lembrar de fazer pausas e alongamentos a cada 1 hora de trabalho! Sua coluna agradece!</p>
+        <p>Defina o intervalo para lembrar de fazer uma pausa:</p>
 
-        <button id="startBtn">Iniciar</button>
-        <div id="timer">01:00:00</div>
+        <div>
+            <select id="intervalSelect">
+            <option value="900">15 minutos</option>
+            <option value="1800">30 minutos</option>
+            <option value="3600" selected>1 hora</option>
+            <option value="7200">2 horas</option>
+            </select>
+            <button id="startButton">Iniciar</button>
+        </div>
+
+        <div id="timer">00:00:00</div>
 
         <script src="./js/index.js"></script>
     </body>
